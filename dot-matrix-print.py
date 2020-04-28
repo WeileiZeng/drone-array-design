@@ -101,8 +101,7 @@ def merge_dot_matrix_horizontally(m1,m2):
     return m1
 
 def get_random_color():
-    n=random.randint(30,36)
-    print(n)
+    n=random.randint(25,38)
     return '\033['+str(n)+'m'
 
         
