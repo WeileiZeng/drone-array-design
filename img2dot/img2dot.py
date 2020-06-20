@@ -83,9 +83,21 @@ def reduce(pixelAccess, width, height, dot_distance, dot_size):
 #                print(i,j)
                 remove(pixelAccess, i, j, dot_distance, dot_size)
 
-#def main():
-if (True):
+def main():
+#if (True):
 #    img = Image.open("crop.jpeg")
+#    img = Image.open("raw.jpeg")
+    filename="fig/elephant.png"
+    filename="fig/dragon.jpeg"
+    filename="fig/bird.jpeg"        
+    title = "elephant"
+    img = Image.open(filename)
+
+    rgbimg = Image.new("RGB", img.size)
+    rgbimg.paste(img)
+#    rgbimg.save('foo.jpg')
+    
+    rgbimg.save("raw.jpeg")
     img = Image.open("raw.jpeg")
     pix = img.load()
     width,height=img.size
@@ -97,8 +109,8 @@ if (True):
     img.save("boundary.jpeg")
 
 
-    dot_distance = 10
-    dot_size=3
+    dot_distance = 20
+    dot_size=5
     reduce(pix, width, height, dot_distance, dot_size)
 
     img.show()
@@ -109,4 +121,4 @@ if (True):
 
     
 
-#main()
+main()
