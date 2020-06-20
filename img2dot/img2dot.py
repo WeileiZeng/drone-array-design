@@ -1,5 +1,28 @@
+# for image processing
 from PIL import Image
-import math
+#math.sqrt
+#import math
+#os.listdir()
+import os
+
+#define constant
+red=(255,0,0)
+black=(0,0,0)
+
+# return relative positions of pixels inside a circle
+def get_circle(dot_size):
+    circle=[]
+    for i in range(dot_size):
+        for j in range(dot_size):
+            if ( i*i +j*j < dot_size * dot_size):
+                circle.append((i,j))
+                circle.append((i,-j))
+                circle.append((-i,j))
+                circle.append((-i,-j))
+    #remove the first 4 position for origin
+    return circle[4:]
+
+
 #Uclidean distance from wikipedia page of 'color difference'
 def dist_pixel(pixel):
     r,g,b=pixel
@@ -16,8 +39,10 @@ def dist_pixels(pixel1,pixel2):
     )
     return dist_pixel(pixel)
 
+# get boundary
 def pix2bin(pixelAccess,width,height):
-    pixels_list=[]
+    #pixels_list=[]
+    # a typical value to compare to
     temp=64
     neutral=dist_rgb(temp,temp,temp)
     for i in range(width-1):
@@ -26,17 +51,41 @@ def pix2bin(pixelAccess,width,height):
             if ( dist_pixels(pixelAccess[i,j+1], pixelAccess[i,j]) > neutral ) or ( dist_pixels(pixelAccess[i+1,j], pixelAccess[i,j]) > neutral )  :
                 #print(i,j)
                 #boundary
-                pixelAccess[i,j]=(255,1,1)
-                pixels_row_list.append(1)
+                pixelAccess[i,j]=red
+                #(255,0,0)
+                #pixels_row_list.append(1)
             else:
-                pixelAccess[i,j]=(1,1,1)
-                pixels_row_list.append(0)
-        pixels_list.append(pixels_row_list)
-    return pixels_list
+                pixelAccess[i,j]=black
+                #(0,0,0)
+                #pixels_row_list.append(0)
+        #pixels_list.append(pixels_row_list)
+#    return pixels_list
+    #fix the last line
+    for i in range(width):
+        pixelAccess[i,height-1]=black
+    for j in range(height):
+        pixelAccess[width-1,j]=black
+        
 
-def remove(pixelAccess, row, col, dot_distance, dot_size):
+def draw_dot(pixelAccess, row, col, dot_size_array):
+    color1=(0,120,120)
+    for ( i,j) in dot_size_array:
+        try:
+            pixelAccess[row+i,col+j]=color1
+        except:
+            pass            
+def remove(pixelAccess, row, col, dot_distance_array):
 #    temp=pixelAccess[row,col]
+    # background color used to remove pixels
     color1=(0,0,0)
+    for (i,j) in dot_distance_array:
+        try:
+            pixelAccess[row+i,col+j]=color1
+        except:
+            pass
+    #color for a dot/drone
+
+'''
     for i in range(0,dot_distance):
         for j in range(0,dot_distance):
             try:
@@ -55,7 +104,9 @@ def remove(pixelAccess, row, col, dot_distance, dot_size):
                 pixelAccess[row-i,col-j]=color1
             except:
                 pass
-    color1=(0,120,120)
+'''            
+
+'''        
     for i in range(0,dot_size):
         for j in range(0,dot_size):
             try:
@@ -74,51 +125,102 @@ def remove(pixelAccess, row, col, dot_distance, dot_size):
                 pixelAccess[row-i,col-j]=color1
             except:
                 pass
+'''
 #    pixelAccess[row,col]=temp
     
 def reduce(pixelAccess, width, height, dot_distance, dot_size):
+    dot_distance_array=get_circle(dot_distance)
+
+    # reduce the distance
     for i in range(width-1):
         for j in range(height-1):
+            #if it is a boundary, remove nearby pixels
             if ( pixelAccess[i,j][0] > 200):
 #                print(i,j)
-                remove(pixelAccess, i, j, dot_distance, dot_size)
+                remove(pixelAccess, i, j, dot_distance_array)
+                
+    #draw the dot/drone
+def draw_dots(pixelAccess, width, height, dot_distance, dot_size):
+    dot_size_array=get_circle(dot_size)    
+    drone_count=0
+    for i in range(width-1):
+        for j in range(height-1):
+            #if it is a boundary, remove nearby pixels
+            if ( pixelAccess[i,j][0] > 200):
+#                print(i,j)
+                drone_count+=1
+                draw_dot(pixelAccess, i, j, dot_size_array)
+    print("drone count:\t",drone_count)
 
-def main():
-#if (True):
-#    img = Image.open("crop.jpeg")
-#    img = Image.open("raw.jpeg")
-    filename="fig/elephant.png"
-    filename="fig/dragon.jpeg"
-    filename="fig/bird.jpeg"        
-    title = "elephant"
+def convert(title,filename, dot_distance, dot_size,show_img):
+    print("### new run")
+    print("input file:\t",filename)
+    file_raw="tmp/raw-"+title+".jpeg"            #raw file in jpeg
+    file_boundary="tmp/"+title+"-boundary.jpeg"  #boundary
+    file_dots="tmp/"+title+"-dots.jpeg"          #exact position
+    file_drone="output/"+title+"-drone.jpeg"     #draw
+
+
     img = Image.open(filename)
 
+    #resize if height > 600
+    width,height=img.size
+    max_height=600
+    if (height > max_height):        
+        img = img.resize((width*max_height//height,max_height))
+        print("resized to",img.size)
+
+    
+    #convert to RGB mode and jpeg format
     rgbimg = Image.new("RGB", img.size)
     rgbimg.paste(img)
-#    rgbimg.save('foo.jpg')
-    
-    rgbimg.save("raw.jpeg")
-    img = Image.open("raw.jpeg")
+
+    rgbimg.save(file_raw)
+    print("saved as\t",file_raw)
+
+    #reopen and get bounday
+    img = Image.open(file_raw)
     pix = img.load()
     width,height=img.size
     pix2bin(pix,width,height)
-
+          
 #    im2 = Image.new(img.mode, img.size)
 #    im2.putdata(pix)
-    img.show()
-    img.save("boundary.jpeg")
-
-
-    dot_distance = 20
-    dot_size=5
+          
+    if show_img : img.show()
+    img.save(file_boundary)
+    print("boundary file:\t",file_boundary)
+    
+    # reduce to dot array according to dot_distance
     reduce(pix, width, height, dot_distance, dot_size)
 
-    img.show()
+    img.save(file_dots)
+    print("dot file:",file_dots)
+    if show_img :    img.show()
+    draw_dots(pix, width, height, dot_distance, dot_size)
+    if show_img :    img.show()
 
-    
-    img.save("drone.jpeg")
+
+    img.save(file_drone)
+    print("drone file:\t",file_drone)
+
 #    a=input()
 
     
+def main():
+    print("====== This program convert a cartoon to a drone array ======")
+    dir_input = "input"
+    #distance between drones
+    dot_distance = 15
+    #size of a drone/dot
+    dot_size=4
+    print("dot_distance:\t",dot_distance)
+    print("dot_size:\t",dot_size)    
+    show_img=False
+    for file in os.listdir(dir_input):
+        title='.'.join(file.split(".")[:-1])
+        print(title,dir_input+'/'+file)
+        convert(title,dir_input+'/'+file,dot_distance, dot_size,show_img)
+        
 
 main()
