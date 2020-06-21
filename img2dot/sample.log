@@ -1,0 +1,68 @@
+========= This program convert a cartoon to a drone array =========
+dot_distance:	 10
+dot_size:	 3
+elephant input/elephant.png
+-------------------- input/elephant.png -------------------
+input file:	 input/elephant.png
+saved as	 tmp/elephant-raw.jpeg
+boundary file:	 tmp/elephant-boundary.gif ,  tmp/elephant-boundary.jpeg
+get weight file: weight/elephant-weight.jpeg
+dot file:	 tmp/elephant-dots.jpeg
+drone count:	 324
+drone file:	 output/elephant-drone.jpeg
+dragon input/dragon.jpeg
+-------------------- input/dragon.jpeg -------------------
+input file:	 input/dragon.jpeg
+saved as	 tmp/dragon-raw.jpeg
+boundary file:	 tmp/dragon-boundary.gif ,  tmp/dragon-boundary.jpeg
+no weight file, use boundary file instead: tmp/dragon-boundary.jpeg
+dot file:	 tmp/dragon-dots.jpeg
+drone count:	 657
+drone file:	 output/dragon-drone.jpeg
+propose input/propose.jpeg
+-------------------- input/propose.jpeg -------------------
+input file:	 input/propose.jpeg
+resized to (465, 600)
+saved as	 tmp/propose-raw.jpeg
+boundary file:	 tmp/propose-boundary.gif ,  tmp/propose-boundary.jpeg
+get weight file: weight/propose-weight.jpeg
+dot file:	 tmp/propose-dots.jpeg
+drone count:	 271
+drone file:	 output/propose-drone.jpeg
+bird input/bird.jpeg
+-------------------- input/bird.jpeg -------------------
+input file:	 input/bird.jpeg
+resized to (464, 600)
+saved as	 tmp/bird-raw.jpeg
+boundary file:	 tmp/bird-boundary.gif ,  tmp/bird-boundary.jpeg
+get weight file: weight/bird-weight.jpeg
+dot file:	 tmp/bird-dots.jpeg
+drone count:	 334
+drone file:	 output/bird-drone.jpeg
+diamond input/diamond.jpeg
+-------------------- input/diamond.jpeg -------------------
+input file:	 input/diamond.jpeg
+saved as	 tmp/diamond-raw.jpeg
+boundary file:	 tmp/diamond-boundary.gif ,  tmp/diamond-boundary.jpeg
+no weight file, use boundary file instead: tmp/diamond-boundary.jpeg
+dot file:	 tmp/diamond-dots.jpeg
+drone count:	 286
+drone file:	 output/diamond-drone.jpeg
+bird3 input/bird3.jpeg
+-------------------- input/bird3.jpeg -------------------
+input file:	 input/bird3.jpeg
+saved as	 tmp/bird3-raw.jpeg
+boundary file:	 tmp/bird3-boundary.gif ,  tmp/bird3-boundary.jpeg
+no weight file, use boundary file instead: tmp/bird3-boundary.jpeg
+dot file:	 tmp/bird3-dots.jpeg
+drone count:	 204
+drone file:	 output/bird3-drone.jpeg
+bird2 input/bird2.jpeg
+-------------------- input/bird2.jpeg -------------------
+input file:	 input/bird2.jpeg
+saved as	 tmp/bird2-raw.jpeg
+boundary file:	 tmp/bird2-boundary.gif ,  tmp/bird2-boundary.jpeg
+no weight file, use boundary file instead: tmp/bird2-boundary.jpeg
+dot file:	 tmp/bird2-dots.jpeg
+drone count:	 629
+drone file:	 output/bird2-drone.jpeg

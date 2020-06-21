@@ -1,2 +1,2 @@
 clean:
-	rm *.gif *.jpeg *.png
+	rm *.gif *.jpeg *.png *.eps
