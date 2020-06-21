@@ -153,16 +153,15 @@ def draw_dots(pixelAccess, width, height, dot_distance, dot_size):
     print("drone count:\t",drone_count)
 
 def convert(title,filename, dot_distance, dot_size,show_img):
-    print("### new run")
+    print("--------------------",filename,"-------------------")
     print("input file:\t",filename)
-    file_raw="tmp/raw-"+title+".jpeg"            #raw file in jpeg
-    file_boundary="tmp/"+title+"-boundary.jpeg"  #boundary
+    file_raw="tmp/"+title+"-raw.jpeg"            #raw file in jpeg
+    file_boundary="tmp/"+title+"-boundary.gif"  #boundary
     file_dots="tmp/"+title+"-dots.jpeg"          #exact position
     file_drone="output/"+title+"-drone.jpeg"     #draw
 
 
     img = Image.open(filename)
-
     #resize if height > 600
     width,height=img.size
     max_height=600
@@ -208,7 +207,7 @@ def convert(title,filename, dot_distance, dot_size,show_img):
 
     
 def main():
-    print("====== This program convert a cartoon to a drone array ======")
+    print("========= This program convert a cartoon to a drone array =========")
     dir_input = "input"
     #distance between drones
     dot_distance = 15
