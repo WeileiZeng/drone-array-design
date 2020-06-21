@@ -83,62 +83,26 @@ def remove(pixelAccess, row, col, dot_distance_array):
             pixelAccess[row+i,col+j]=color1
         except:
             pass
-    #color for a dot/drone
 
-'''
-    for i in range(0,dot_distance):
-        for j in range(0,dot_distance):
-            try:
-                pixelAccess[row+i,col+j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row-i,col+j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row+i,col-j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row-i,col-j]=color1
-            except:
-                pass
-'''            
 
-'''        
-    for i in range(0,dot_size):
-        for j in range(0,dot_size):
-            try:
-                pixelAccess[row+i,col+j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row-i,col+j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row+i,col-j]=color1
-            except:
-                pass
-            try:
-                pixelAccess[row-i,col-j]=color1
-            except:
-                pass
-'''
-#    pixelAccess[row,col]=temp
     
-def reduce(pixelAccess, width, height, dot_distance, dot_size):
+def reduce(pixelAccess, pixelAccessWeight, width, height, dot_distance, dot_size):
+    #according to the weight, there will be two different distance
+    
     dot_distance_array=get_circle(dot_distance)
-
+    dot_distance_array_big=get_circle(dot_distance*3//2)
     # reduce the distance
     for i in range(width-1):
         for j in range(height-1):
             #if it is a boundary, remove nearby pixels
             if ( pixelAccess[i,j][0] > 200):
 #                print(i,j)
-                remove(pixelAccess, i, j, dot_distance_array)
-                
+                if ( pixelAccessWeight[i,j][0] < 200):
+                    remove(pixelAccess, i, j, dot_distance_array)
+                else:
+#                    print(i,j)
+                    remove(pixelAccess, i, j, dot_distance_array_big)
+                    
     #draw the dot/drone
 def draw_dots(pixelAccess, width, height, dot_distance, dot_size):
     dot_size_array=get_circle(dot_size)    
@@ -155,8 +119,9 @@ def draw_dots(pixelAccess, width, height, dot_distance, dot_size):
 def convert(title,filename, dot_distance, dot_size,show_img):
     print("--------------------",filename,"-------------------")
     print("input file:\t",filename)
-    file_raw="tmp/"+title+"-raw.jpeg"            #raw file in jpeg
-    file_boundary="tmp/"+title+"-boundary.gif"  #boundary
+    file_raw="tmp/"+title+"-raw.jpeg"            # raw file in jpeg
+    file_boundary="tmp/"+title+"-boundary.gif"   # boundary
+    file_boundary_jpeg="tmp/"+title+"-boundary.jpeg"  #boundary
     file_dots="tmp/"+title+"-dots.jpeg"          #exact position
     file_drone="output/"+title+"-drone.jpeg"     #draw
 
@@ -188,11 +153,26 @@ def convert(title,filename, dot_distance, dot_size,show_img):
           
     if show_img : img.show()
     img.save(file_boundary)
-    print("boundary file:\t",file_boundary)
-    
-    # reduce to dot array according to dot_distance
-    reduce(pix, width, height, dot_distance, dot_size)
+    img.save(file_boundary_jpeg)
+    print("boundary file:\t",file_boundary,"\t",file_boundary_jpeg)
 
+    # get weight
+    try:        
+        file_weight="weight/"+title+"-weight.jpeg"
+        #file_weight=file_boundary_jpeg
+        img_weight=Image.open(file_weight)
+        pixAccessWeight=img_weight.load()
+        print("get weight file:",file_weight)
+    except:
+        #if it doesn't exist, use boundary file itself
+        file_weight=file_boundary
+        img_weight=Image.open(file_weight)
+        pixAccessWeight=img_weight.load()
+        print("no weight file")
+
+        
+    # reduce to dot array according to dot_distance
+    reduce(pix, pixAccessWeight, width, height, dot_distance, dot_size)
     img.save(file_dots)
     print("dot file:",file_dots)
     if show_img :    img.show()
@@ -210,16 +190,28 @@ def main():
     print("========= This program convert a cartoon to a drone array =========")
     dir_input = "input"
     #distance between drones
-    dot_distance = 15
+    dot_distance = 8
     #size of a drone/dot
-    dot_size=4
+    dot_size=2
     print("dot_distance:\t",dot_distance)
     print("dot_size:\t",dot_size)    
-    show_img=False
+    show_img=True
+
+    # test
+    if (True):
+        title="bird"
+        title="elephant"
+#        title="propose"
+
+#        file=title+".jpeg"
+        file=title+".png"
+        convert(title,dir_input+'/'+file,dot_distance, dot_size,show_img)
+        return
+        
     for file in os.listdir(dir_input):
         title='.'.join(file.split(".")[:-1])
         print(title,dir_input+'/'+file)
         convert(title,dir_input+'/'+file,dot_distance, dot_size,show_img)
-        
+
 
 main()
