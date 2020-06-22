@@ -4,7 +4,7 @@ This program convert cartoons into drone arrays with given size
 ### Requirement
 - General
   - python3
-  - PIL: `pip install Pillow`
+  - PIL: `pip3 install Pillow`
 - Optional (alredy in this repo): used by `weight.py`
   - `graphycs.py`
   - `Button.py`
