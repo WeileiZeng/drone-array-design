@@ -189,52 +189,62 @@ def convert(title,filename, dot_distance, dot_size,debug):
 def main():
     print("========= This program convert a cartoon to a drone array =========")
     print("An optional weight img can be provided in weight/. Use weight.py to edit it")
+
+    ######################################### define parameters
     dir_input = "input"
     print("input directary:\t",dir_input)
-    #distance between drones
-    dot_distance = 10
-    #size of a drone/dot
-    dot_size=3
-    drone_count_min=180
-    drone_count_max=200
+
+    dot_distance = 10       #distance between drones
+    dot_size=3              #size of a drone/dot
+    drone_count_min=280
+    drone_count_max=300
+    allowed_img_type=["jpg","jpeg","gif","png","eps"]
     print("dot_distance:\t",dot_distance)
     print("dot_size:\t",dot_size)
     print("drone_count_min:\t",drone_count_min)
     print("drone_count_max:\t",drone_count_max)
+    print("allowed img type: ",allowed_img_type,"sub directory will be skipped")
 #    show_img=False
     debug=0
+    #debug = 0, 1, 2. 0 for no debug. 1 for verbose. 2 for basic info
     print("debug mode:\t",debug)
-    #debug = 0, 1, 2
     
-    # test
+    # Change False to True for a test
     if (False):
         title="bird"
         title="elephant"
 #        title="propose"
-
 #        file=title+".jpeg"
         file=title+".png"
         convert(title,dir_input+'/'+file,dot_distance, dot_size,debug)
         return
-        
+
+    ###########  The real convert part
+    print( "Now working on",os.listdir(dir_input))
     for file in os.listdir(dir_input):
+        filetype=file.split(".")[-1]
+        if filetype not in allowed_img_type:
+            print("----------",file, " is not a picture. skipped")
+            continue
+
         title='.'.join(file.split(".")[:-1])
         print(title,dir_input+'/'+file)
         drone_count = convert(title,dir_input+'/'+file,dot_distance, dot_size, debug)
         if ( drone_count < drone_count_min ):
             #need more drones with smaller distance
-            for i in range(1,6):
+            for i in range(1,20):
                 print("redo with smaller distance")
                 drone_count = convert(title,dir_input+'/'+file,dot_distance-i, dot_size, debug)
                 if ( drone_count >= drone_count_min ):
                     break
         elif ( drone_count > drone_count_max ):
             #need less drones with larger distance
-            for i in range(1,6):
+            for i in range(1,20):
                 print("redo with larger distance")
                 drone_count = convert(title,dir_input+'/'+file,dot_distance+i, dot_size, debug)
                 if ( drone_count <= drone_count_max ):
-                    break
-                
+                    break                
+    print("program finished")
 
 main()
+
