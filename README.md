@@ -1,6 +1,8 @@
 
 # print chinese and English as dot matrix
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/WeileiZeng/drone-array-design/master)
+
 require python3
 
 feature:
