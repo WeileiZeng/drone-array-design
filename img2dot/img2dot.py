@@ -195,8 +195,8 @@ def main():
     dot_distance = 10
     #size of a drone/dot
     dot_size=3
-    drone_count_min=300
-    drone_count_max=400
+    drone_count_min=180
+    drone_count_max=200
     print("dot_distance:\t",dot_distance)
     print("dot_size:\t",dot_size)
     print("drone_count_min:\t",drone_count_min)
