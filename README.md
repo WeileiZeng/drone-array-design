@@ -22,6 +22,10 @@ reference:
 
 ![screen shot](screenshot.png)
 
+# TODO
+
+ideas: Considering the SVG format, all data is saved as paths, lines, circles, polygons, etc. I can use a similar format to save the skeleton image, hence all intersection points can be identified. It is also easier to evenly distribute the dots/drones.
+
 ### Acknowledgement
 
 This repoo is modified based on the [original repo](https://github.com/pengfexue2/printPlay). My main update is adding support fot English alphabet and rearrange the code into small blocks
