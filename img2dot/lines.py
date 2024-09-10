@@ -14,6 +14,15 @@ def sample(): # return a square lattice
             col = j
             xy_list.append((row,col))
 
+    # add vertical dots
+    yx_list=[]
+    for i in range(cols+1):
+        col = 10*i
+        for j in range(L*rows):
+            row = j
+            yx_list.append((row,col))
+    xy_list.extend(yx_list)
+    
     #random.shuffle(xy_list)
     return xy_list
 
